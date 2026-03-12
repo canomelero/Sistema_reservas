@@ -35,11 +35,7 @@ replay_pid*
 .settings/
 
 # VS Code workspace settings (keep shared settings if needed)
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/launch.json
-!.vscode/tasks.json
+.vscode
 
 # OS files
 .DS_Store
