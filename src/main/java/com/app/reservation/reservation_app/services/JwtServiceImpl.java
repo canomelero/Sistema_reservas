@@ -18,20 +18,25 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    @Value("${security.jwt.secret}")
-    private String jwtSecretKey;
+    private final String jwtSecretKey;
+    private final Long jwtExpiration;
+    private final Long refreshTokenExpiration;
 
-    @Value("${security.jwt.expiration}")
-    private Long jwtExpiration;
-
-    @Value("${security.jwt.refresh-token.expiration}")
-    private Long refreshTokenExpiration;
+    public JwtServiceImpl(
+        @Value("${security.jwt.secret}") String jwtSecretKey,
+        @Value("${security.jwt.expiration}") Long jwtExpiration,
+        @Value("${security.jwt.refresh-token.expiration}") Long refreshTokenExpiration
+    ) {
+        this.jwtSecretKey = jwtSecretKey;
+        this.jwtExpiration = jwtExpiration;
+        this.refreshTokenExpiration = refreshTokenExpiration;
+    }
 
     @Override
     public String buildToken(User user, Long expiration) {
         return Jwts.builder()
                 .id(user.getId().toString())
-                .claims(Map.of("name", user.getName()))
+                .claims(Map.of("name", user.getName(), "userId", user.getId()))
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))

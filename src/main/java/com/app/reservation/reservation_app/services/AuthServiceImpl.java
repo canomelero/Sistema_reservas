@@ -3,12 +3,12 @@ package com.app.reservation.reservation_app.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.reservation.reservation_app.dto.LoginRequest;
 import com.app.reservation.reservation_app.dto.RegisterRequest;
@@ -18,25 +18,20 @@ import com.app.reservation.reservation_app.models.Token;
 import com.app.reservation.reservation_app.models.User;
 import com.app.reservation.reservation_app.repositories.TokenRepository;
 import com.app.reservation.reservation_app.repositories.UserRepository;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
+@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private TokenRepository tokenRep;
-
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private UserRepository userRep;
-
-    @Autowired
-    private JwtService jwtServ;
-
-    @Autowired
-    private AuthenticationManager authManager;
+    private final TokenRepository tokenRep;
+    private final PasswordEncoder encoder;
+    private final UserRepository userRep;
+    private final JwtService jwtServ;
+    private final AuthenticationManager authManager;
 
     //@Autowired
     //private EmailServiceImpl emailServ;
@@ -45,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
     // It is better to have a table for authentication tokens and another for confirmation tokens
     // In the other way, the user table will have a confirmed boolean field and if user click on 
     // confirm button, this field change to true
+    @Transactional
     @Override
     public TokenResponse register(RegisterRequest request) {
         // Check if email exists
@@ -69,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtServ.generateRefreshToken(savedUser);
 
         // Saved the token created
-        Token newToken = new Token(token, false, false, savedUser);
+        Token newToken = new Token(token, false, false, true, savedUser);
         tokenRep.save(newToken);
 
         // Send the email with message
@@ -80,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
         return new TokenResponse(token, refreshToken);
     }
 
+    @Transactional
     @Override
     public String confirm(String token) {
         // Extract the token information to check if it is correct
@@ -110,6 +107,7 @@ public class AuthServiceImpl implements AuthService {
         return "confirmed";
     }
 
+    @Transactional
     @Override
     public TokenResponse login(LoginRequest request) {
         // We can use the authManager to do this
@@ -131,12 +129,13 @@ public class AuthServiceImpl implements AuthService {
         revokeAllTokens(user);
 
         // Saved the token created
-        Token newToken = new Token(token, false, false, user);
+        Token newToken = new Token(token, false, false, true, user);
         tokenRep.save(newToken);
 
         return new TokenResponse(token, refreshToken);
     }
 
+    @Transactional
     @Override
     public TokenResponse refreshToken(String authHeader) {
         if(authHeader == null || !authHeader.contains("Bearer ")) {
@@ -167,7 +166,7 @@ public class AuthServiceImpl implements AuthService {
         revokeAllTokens(userDb);
 
         // Saved the token created
-        Token newToken = new Token(token, false, false, userDb);
+        Token newToken = new Token(token, false, false, true, userDb);
         tokenRep.save(newToken);
 
         return new TokenResponse(token, refreshToken);

@@ -2,7 +2,6 @@ package com.app.reservation.reservation_app.services;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,11 +9,13 @@ import com.app.reservation.reservation_app.dto.CreateResourceRequest;
 import com.app.reservation.reservation_app.models.Resource;
 import com.app.reservation.reservation_app.repositories.ResourceRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ResourceServiceImpl implements ResourceService {
 
-    @Autowired
-    private ResourceRepository resourceRep;
+    private final ResourceRepository resourceRep;
 
     @Transactional
     @Override

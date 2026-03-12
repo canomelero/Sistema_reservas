@@ -3,65 +3,28 @@ package com.app.reservation.reservation_app.dto;
 import java.time.LocalDateTime;
 
 import com.app.reservation.reservation_app.models.enums.ReservationStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class CreateReservationRequest {
-    @NotNull
+    @NotNull(message = "{reservation.startDate.notblank}")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDate;
 
-    @NotNull
+    @NotNull(message = "{reservation.endDate.notnull}")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDate;
 
-    @NotNull
+    @NotNull(message = "{reservation.status.notnull}")
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
-
-    @NotNull
-    private Long userId;
-
-    @NotNull
-    private Long resourceId;
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public ReservationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReservationStatus status) {
-        this.status = status;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(Long resourceId) {
-        this.resourceId = resourceId;
-    }
 }

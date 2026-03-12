@@ -9,85 +9,49 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tokens")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "{user.token.notblank}")
     @Column(unique = true)
     private String token;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    private boolean revoked;
+    @NotNull(message = "{user.token.revoked.notnull}")
+    @Column(nullable = false)
+    private Boolean revoked;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    private boolean expired;
+    @NotNull(message = "{user.token.expired.notnull}")
+    @Column(nullable = false)
+    private Boolean expired;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    private boolean confirmed;
+    @NotNull(message = "{user.token.confirmed.notnull}")
+    @Column(nullable = false)
+    private Boolean confirmed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Token(String token, Boolean revoked, Boolean expired, User user) {
+    public Token(String token, Boolean revoked, Boolean expired, Boolean confirmed, User user) {
         this.token = token;
         this.revoked = revoked;
         this.expired = expired;
         this.user = user;
-    }
-
-    public Token() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Boolean isRevoked() {
-        return revoked;
-    }
-
-    public void setRevoked(Boolean revoked) {
-        this.revoked = revoked;
-    }
-
-    public Boolean isExpired() {
-        return expired;
-    }
-
-    public void setExpired(Boolean expired) {
-        this.expired = expired;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
     }
 

@@ -3,7 +3,6 @@ package com.app.reservation.reservation_app.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,14 +15,17 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+    private final String from;
+    private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
-    @Value("${spring.mail.username}")
-    private String from;
-
-    private final static Logger LOGGER = LoggerFactory
-            .getLogger(EmailService.class);
+    public EmailServiceImpl(
+        JavaMailSender mailSender,
+        @Value("${spring.mail.username}") String from
+    ) {
+        this.mailSender = mailSender;
+        this.from = from;
+    }
 
     @Override
     @Async

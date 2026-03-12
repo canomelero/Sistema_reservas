@@ -65,15 +65,14 @@ public class ErrorResponseHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDto> argumentNotValid(MethodArgumentNotValidException e) {
-        StringBuilder errors = new StringBuilder();
-
-        e.getBindingResult().getFieldErrors().forEach(error -> {
-            errors.append(error.getField() + ": " + error.getDefaultMessage()).append("/");
-        });
+        String errors = e.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+            .reduce((left, right) -> left + "/" + right)
+            .orElse("");
 
         ErrorDto errorDto = new ErrorDto(
             "Error in argument validation",
-            errors.toString(),
+            errors,
             HttpStatus.BAD_REQUEST.value()
         );
 

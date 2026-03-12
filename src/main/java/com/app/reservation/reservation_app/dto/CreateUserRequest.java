@@ -2,48 +2,21 @@ package com.app.reservation.reservation_app.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@AllArgsConstructor
+@Getter
+@Setter
 public class CreateUserRequest {
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "{user.name.notblank}")
     private String name;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
+    @NotBlank(message = "{user.email.notblank}")
+    @Email(message = "{user.email.invalid}")
     private String email;
 
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "{user.password.notblank}")
     private String password;
-
-    public CreateUserRequest(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public CreateUserRequest() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

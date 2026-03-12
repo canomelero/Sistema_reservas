@@ -2,7 +2,6 @@ package com.app.reservation.reservation_app.controllers;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import com.app.reservation.reservation_app.models.Reservation;
 import com.app.reservation.reservation_app.services.ReservationService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +23,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(value = "/api/reservation")
+@AllArgsConstructor
 public class ReservationController {
 
-    @Autowired
-    private ReservationService reservationServ;
+    private final ReservationService reservationServ;
 
-    @PostMapping("/")
-    public ResponseEntity<?> create(@Valid @RequestBody CreateReservationRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationServ.create(request));
+    @PostMapping("/user/{userId}/resource/{resourceId}")
+    public ResponseEntity<?> create(
+        @PathVariable Long userId,
+        @PathVariable Long resourceId,
+        @Valid @RequestBody CreateReservationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationServ.create(userId, resourceId, request));
     }
 
     @GetMapping("/{id}")

@@ -2,7 +2,6 @@ package com.app.reservation.reservation_app.services;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,12 +10,14 @@ import com.app.reservation.reservation_app.exceptions.EntityNotFoundException;
 import com.app.reservation.reservation_app.models.User;
 import com.app.reservation.reservation_app.repositories.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRep;
+    private final UserRepository userRep;
 
     @Transactional
     @Override

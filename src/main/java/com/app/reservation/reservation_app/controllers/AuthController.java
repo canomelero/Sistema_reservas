@@ -9,8 +9,8 @@ import com.app.reservation.reservation_app.dto.RegisterRequest;
 import com.app.reservation.reservation_app.services.AuthService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,30 +21,30 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
-@RequestMapping("/auth/")
+@RequestMapping("/api/auth")
+@AllArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthService authServ;
+    private final AuthService authServ;
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authServ.register(request));
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticate(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(authServ.login(request));
     }
     
     // This endpoint only needs the token which is on header request ("Beare aefwefpoqe....")
     // The token must be the refresh-token that we get when authenticate is executed
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(authServ.refreshToken(authHeader));
     }
     
-    @GetMapping("confirm")
+    @GetMapping("/confirm")
     public ResponseEntity<?> registerConfirm(@RequestParam String token) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(authServ.confirm(token));
     }

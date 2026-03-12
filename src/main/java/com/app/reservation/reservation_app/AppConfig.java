@@ -19,7 +19,7 @@ import com.app.reservation.reservation_app.repositories.UserRepository;
 
 @Configuration
 @PropertySources({
-    @PropertySource("classpath:message.properties")
+    @PropertySource("classpath:ValidationMessages.properties")
 })
 public class AppConfig {
 

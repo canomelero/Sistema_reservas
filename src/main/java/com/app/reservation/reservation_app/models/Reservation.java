@@ -14,20 +14,29 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "reservations")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "{reservation.startDate.notnull}")
     private LocalDateTime startDate;
 
-    @NotNull
+    @NotNull(message = "{reservation.endDate.notnull}")
     private LocalDateTime endDate;
 
+    @NotNull(message = "{reservation.status.notnull}")
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
@@ -48,58 +57,6 @@ public class Reservation {
         this.endDate = endDate;
         this.status = status;
         this.user = user;
-        this.resource = resource;
-    }
-
-    public Reservation() {
-        this(null, null, null, null, null);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public ReservationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReservationStatus status) {
-        this.status = status;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Resource getResource() {
-        return resource;
-    }
-
-    public void setResource(Resource resource) {
         this.resource = resource;
     }
 

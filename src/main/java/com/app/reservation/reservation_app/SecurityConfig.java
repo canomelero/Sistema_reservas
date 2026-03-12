@@ -1,6 +1,5 @@
 package com.app.reservation.reservation_app;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.app.reservation.reservation_app.models.Token;
 import com.app.reservation.reservation_app.repositories.TokenRepository;
 
+import lombok.AllArgsConstructor;
+
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -22,16 +23,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 // need to have to execute it, logout, etc
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private AuthenticationProvider authProvider;
-
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
-
-    @Autowired
-    private TokenRepository tokenRep;
+    private final AuthenticationProvider authProvider;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final TokenRepository tokenRep;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,7 +37,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> 
                 // Allow all requests to auth endpoints (handles trailing slash or subpaths)
-                request.requestMatchers("/auth/**").permitAll()
+                request.requestMatchers("/api/auth/**").permitAll()
                         .anyRequest()
                         .authenticated()
             )

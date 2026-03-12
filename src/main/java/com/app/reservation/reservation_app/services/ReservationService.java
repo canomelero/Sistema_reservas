@@ -6,6 +6,6 @@ import com.app.reservation.reservation_app.dto.CreateReservationRequest;
 import com.app.reservation.reservation_app.models.Reservation;
 
 public interface ReservationService {
-    Reservation create(CreateReservationRequest reservation);
+    Reservation create(Long userId, Long resourceId, CreateReservationRequest reservation);
     Optional<Reservation> getReservationById(Long id);
 }

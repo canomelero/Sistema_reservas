@@ -1,23 +1,17 @@
 package com.app.reservation.reservation_app.dto;
 
-public class TokenResponse {
-    private String accesToken;
-    private String refreshToken;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-    public TokenResponse(String accesToken, String refreshToken) {
-        this.accesToken = accesToken;
-        this.refreshToken = refreshToken;
-    }
-    public String getAccesToken() {
-        return accesToken;
-    }
-    public void setAccesToken(String accesToken) {
-        this.accesToken = accesToken;
-    }
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
+@AllArgsConstructor
+@Getter
+@Setter
+public class TokenResponse {
+    @NotBlank(message = "{user.token.notblank}")
+    private String accesToken;
+
+    @NotBlank(message = "{user.refresh-token.notblank}")
+    private String refreshToken;
 }

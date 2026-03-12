@@ -2,7 +2,6 @@ package com.app.reservation.reservation_app.controllers;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import com.app.reservation.reservation_app.models.Resource;
 import com.app.reservation.reservation_app.services.ResourceService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(value = "/api/resource")
+@AllArgsConstructor
 public class ResourceController {
 
-    @Autowired
-    private ResourceService resourceServ;
+    private final ResourceService resourceServ;
     
     @PostMapping("/")
     public ResponseEntity<?> create(@Valid @RequestBody CreateResourceRequest request) {

@@ -9,82 +9,44 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "resources")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "{resource.type.notnull}")
     @Enumerated(EnumType.STRING)
     private ResourceType type;
 
-    @NotBlank
-    @JoinColumn(unique = true)
+    @NotBlank(message = "{resource.name.notblank}")
+    @Column(unique = true)
     private String name;
 
-    @NotNull
+    @NotNull(message = "{resource.capacity.notnull}")
     private Integer capacity;
 
-    @NotNull
-    // It is neccesary if you want to store a boolean value (in database it will be saved as 1 or 0)
-    @Column(columnDefinition = "TINYINT(1)")
+    @NotNull(message = "{resource.active.notnull}")
+    @Column(nullable = false)
     private Boolean active;
 
     public Resource(ResourceType type, String name, Integer capacity, Boolean active) {
         this.type = type;
         this.name = name;
         this.capacity = capacity;
-        this.active = active;
-    }
-
-    public Resource() {
-        this(null, null, null, null);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ResourceType getType() {
-        return type;
-    }
-
-    public void setType(ResourceType type) {
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
         this.active = active;
     }
 

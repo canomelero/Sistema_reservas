@@ -6,61 +6,26 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class CreateResourceRequest {
-    @NotNull(message = "Type is required")
+    @NotNull(message = "{resource.type.notnull}")
     @Enumerated(EnumType.STRING)
     private ResourceType type;
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "{resource.name.notblank}")
     private String name;
 
-    @NotNull(message = "Capacity is required")
+    @NotNull(message = "{resource.capacity.notnull}")
     private Integer capacity;
 
-    @NotNull(message = "Active is required")
+    @NotNull(message = "{resource.active.notnull}")
     private Boolean active;
-
-    public CreateResourceRequest(@NotNull ResourceType type, @NotBlank String name, @NotNull Integer capacity,
-            @NotNull Boolean active) {
-        this.type = type;
-        this.name = name;
-        this.capacity = capacity;
-        this.active = active;
-    }
-
-    public CreateResourceRequest() {
-    }
-
-    public ResourceType getType() {
-        return type;
-    }
-
-    public void setType(ResourceType type) {
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
 }

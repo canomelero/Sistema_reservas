@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,34 +20,36 @@ import com.app.reservation.reservation_app.repositories.ReservationRepository;
 import com.app.reservation.reservation_app.repositories.ResourceRepository;
 import com.app.reservation.reservation_app.repositories.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    @Autowired
-    private ReservationRepository reservationRep;
-
-    @Autowired
-    private UserRepository userRep;
-
-    @Autowired
-    private ResourceRepository resourceRep;
+    private final ReservationRepository reservationRep;
+    private final UserRepository userRep;
+    private final ResourceRepository resourceRep;
     
     @Transactional
     @Override
-    public Reservation create(CreateReservationRequest reservationRequest) {
-        Optional<User> optionalUser = userRep.findById(reservationRequest.getUserId());
-        Optional<Resource> optionalResource = resourceRep.findById(reservationRequest.getResourceId());
+    public Reservation create(
+        Long userId,
+        Long resourceId,
+        CreateReservationRequest reservationRequest
+    ) {
+        Optional<User> optionalUser = userRep.findById(userId);
+        Optional<Resource> optionalResource = resourceRep.findById(resourceId);
         User user = null;
         Resource resource = null;
 
         if(optionalUser.isEmpty()) {
-            throw new EntityNotFoundException("user", reservationRequest.getUserId());
+            throw new EntityNotFoundException("user", userId);
         } else {
             user = optionalUser.get();
         }
 
         if(optionalResource.isEmpty()) {
-            throw new EntityNotFoundException("resource", reservationRequest.getResourceId());
+            throw new EntityNotFoundException("resource", resourceId);
         } else {
             resource = optionalResource.get();
         }
